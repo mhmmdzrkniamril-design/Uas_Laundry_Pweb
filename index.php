@@ -1,44 +1,52 @@
 <div class="card table-card">
   <div class="card-header d-flex align-items-center justify-content-between">
-    <h6 class="mb-0 fw-bold"><i class="fas fa-users me-2" style="color:#1e88e5;"></i>Data Pelanggan</h6>
-    <a href="<?= site_url('pelanggan/tambah') ?>" class="btn btn-sm btn-primary rounded-pill">
-      <i class="fas fa-plus me-1"></i>Tambah Pelanggan
+    <h6 class="mb-0 fw-bold"><i class="fas fa-receipt me-2" style="color:#1e88e5;"></i>Data Transaksi</h6>
+    <a href="<?= site_url('transaksi/tambah') ?>" class="btn btn-sm btn-primary rounded-pill">
+      <i class="fas fa-plus me-1"></i>Transaksi Baru
     </a>
   </div>
   <div class="card-body p-0">
     <div class="table-responsive">
       <table class="table table-hover mb-0">
         <thead><tr>
-          <th width="50">#</th>
-          <th>Nama Pelanggan</th>
-          <th>Telepon</th>
-          <th>Email</th>
-          <th>Alamat</th>
-          <th>Tgl Daftar</th>
-          <th width="120">Aksi</th>
+          <th>#</th>
+          <th>Kode</th>
+          <th>Pelanggan</th>
+          <th>Layanan</th>
+          <th>Berat</th>
+          <th>Total</th>
+          <th>Tgl Masuk</th>
+          <th>Tgl Selesai</th>
+          <th>Status</th>
+          <th width="130">Aksi</th>
         </tr></thead>
         <tbody>
-        <?php $no=1; foreach ($pelanggan as $p): ?>
+        <?php $no=1; foreach ($transaksi as $t): ?>
         <tr>
           <td><?= $no++ ?></td>
-          <td class="fw-500"><?= htmlspecialchars($p['nama_pelanggan']) ?></td>
-          <td><?= htmlspecialchars($p['telepon']) ?></td>
-          <td><?= $p['email'] ?: '<span class="text-muted">-</span>' ?></td>
-          <td><?= $p['alamat'] ? substr($p['alamat'],0,40).'...' : '<span class="text-muted">-</span>' ?></td>
-          <td><?= date('d/m/Y', strtotime($p['created_at'])) ?></td>
+          <td><code><?= $t['kode_transaksi'] ?></code></td>
+          <td><?= $t['nama_pelanggan'] ?></td>
+          <td><?= $t['nama_layanan'] ?></td>
+          <td><?= $t['berat_kg'] ?> kg</td>
+          <td class="fw-500">Rp <?= number_format($t['total_harga'],0,',','.') ?></td>
+          <td><?= date('d/m/Y', strtotime($t['tanggal_masuk'])) ?></td>
+          <td><?= date('d/m/Y', strtotime($t['tanggal_selesai'])) ?></td>
+          <td><span class="badge-<?= strtolower($t['status']) ?>"><?= $t['status'] ?></span></td>
           <td>
-            <a href="<?= site_url('pelanggan/edit/'.$p['id_pelanggan']) ?>" class="btn btn-sm btn-warning" title="Edit">
-              <i class="fas fa-edit"></i>
-            </a>
-            <a href="<?= site_url('pelanggan/hapus/'.$p['id_pelanggan']) ?>" class="btn btn-sm btn-danger"
-               onclick="return confirm('Hapus pelanggan ini?')" title="Hapus">
-              <i class="fas fa-trash"></i>
-            </a>
+            <div class="d-flex gap-1 flex-wrap">
+              <a href="<?= site_url('transaksi/nota/'.$t['id_transaksi']) ?>" target="_blank"
+                 class="btn btn-sm btn-info" title="Nota"><i class="fas fa-print"></i></a>
+              <a href="<?= site_url('transaksi/edit/'.$t['id_transaksi']) ?>"
+                 class="btn btn-sm btn-warning" title="Edit"><i class="fas fa-edit"></i></a>
+              <a href="<?= site_url('transaksi/hapus/'.$t['id_transaksi']) ?>"
+                 class="btn btn-sm btn-danger" onclick="return confirm('Hapus transaksi ini?')"
+                 title="Hapus"><i class="fas fa-trash"></i></a>
+            </div>
           </td>
         </tr>
         <?php endforeach; ?>
-        <?php if (empty($pelanggan)): ?>
-        <tr><td colspan="7" class="text-center py-4 text-muted">Belum ada data pelanggan</td></tr>
+        <?php if (empty($transaksi)): ?>
+        <tr><td colspan="10" class="text-center py-4 text-muted">Belum ada transaksi</td></tr>
         <?php endif; ?>
         </tbody>
       </table>
